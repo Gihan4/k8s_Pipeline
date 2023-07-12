@@ -1,18 +1,6 @@
 pipeline {
     agent any
 
-    //triggers {
-        // The pipeline is triggered every minute to check for changes in the git
-        // pollSCM('*/1 * * * *')
-    //}
-
-    environment {
-        testip = sh(
-            script: "aws ec2 describe-instances --region eu-central-1 --filters 'Name=tag:Environment,Values=Compose1' --query 'Reservations[].Instances[].PublicIpAddress' --output text",
-            returnStdout: true
-        ).trim()
-    }
-
     stages {
         stage('Cleanup') {
             steps {
@@ -24,7 +12,7 @@ pipeline {
 
         stage('Stop and Remove Containers and Images from all machines') {
             steps {
-                // Delete from Jenkins server
+                // Delete from Jenkins local server
                 echo "Stopping and removing containers and images on Jenkins server..."
                 sh "docker stop \$(docker ps -aq) || true"
                 sh "docker rm \$(docker ps -aq) || true"
@@ -80,22 +68,6 @@ pipeline {
                         sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose &&
                         sudo chmod +x /usr/local/bin/docker-compose'
                 '''
-            }
-        }
-
-        stage('Install EKS dependencies') {
-            steps {
-                script {
-                    sshCommand remote: remote, command: '''
-                        # Install kubectl
-                        curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.19.6/2021-01-05/bin/linux/amd64/kubectl
-                        chmod +x ./kubectl
-                        sudo mv kubectl /usr/local/bin/kubectl
-                        
-                        # Install eksctl
-                        sudo curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | sudo tar xz -C /usr/local/bin
-                    '''
-                }
             }
         }
 
