@@ -52,6 +52,12 @@ pipeline {
             }
         }
 
+        stage('Check Cluster') {
+            steps {
+                echo "Checking if the cluster is up and running..."
+                sh 'kubectl get nodes'
+            }
+
         stage('Deploy to Kubernetes') {
             steps {
                 // Deploy the Docker image to the Kubernetes cluster using kubectl with the manifest yaml file
