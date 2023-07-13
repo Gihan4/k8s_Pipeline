@@ -57,12 +57,13 @@ pipeline {
                 echo "Checking if the cluster is up and running..."
                 sh 'kubectl get nodes'
             }
+        }
 
         stage('Deploy to Kubernetes') {
             steps {
                 // Deploy the Docker image to the Kubernetes cluster using kubectl with the manifest yaml file
                 echo "deploy docker flask on cluster..."
-                sh 'kubectl apply -f /var/lib/jenkins/k8s-manifests/your-manifest.yaml'
+                sh 'kubectl apply -f /var/lib/jenkins/k8s-manifests/combined-manifest.yaml'
             }
         }
         
