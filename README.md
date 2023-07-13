@@ -2,6 +2,8 @@
 The pipeline script's stages include checking out the Flask repository, building the Flask Docker image, pushing the image to DockerHub, and deploying it to the Kubernetes cluster. It assumes that the cluster is already provisioned and running.
 
 Prerequisites:
+- this ia a quick tutorial to set up before runnning the pipeline. this setup is required only once.
+- notice: if you change the cluster, you shall rerun the command <configure 'kubectl'>.
 
 - Create a cluster in GCP Kubernetes Engine.
 - Install `kubectl` on the local Jenkins machine. You can follow this guide for installing `kubectl` on Linux: [Install `kubectl` on Linux](https://gist.github.com/davidlzs/20237052e4b8a671b65e057c21d13d19#file-install_kubectl_on_linux-sh).
