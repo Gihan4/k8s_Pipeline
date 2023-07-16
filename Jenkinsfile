@@ -40,7 +40,7 @@ pipeline {
             steps {
                 echo "Building Docker flask image ..."
                 dir('Flask') {
-                    sh 'docker build -t gihan4/flask8s:${BUILD_NUMBER} -t gihan4/appimage:latest -f .'
+                    sh 'docker build -t gihan4/flask8s:${BUILD_NUMBER} -t gihan4/flask8s:latest -f .'
                 }
             }
         }
@@ -48,7 +48,7 @@ pipeline {
         stage('Push app Image to Docker Hub') {
             steps {
                 echo "Pushing Docker image to Docker Hub..."
-                sh 'docker push --all-tags gihan4/appimage'
+                sh 'docker push --all-tags gihan4/flask8s'
             }
         }
 
