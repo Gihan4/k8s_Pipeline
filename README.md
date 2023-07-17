@@ -14,5 +14,9 @@ Prerequisites:
 - Configure `kubectl` with cluster credentials on the local host using the command: `gcloud container clusters get-credentials <cluster-name> --zone <zone> --project <project-id>`.
 - store the manifest yaml file in local jenkins.
 - great! now you will have a configured workspace with a connected running cluster to jenkins.
+
+or
+- https://cloud.google.com/sdk/docs/install
+- https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
 - gcloud container clusters get-credentials CLUSTER_NAME
 
