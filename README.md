@@ -18,5 +18,6 @@ Prerequisites:
 or
 - https://cloud.google.com/sdk/docs/install
 - https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
+- gcloud auth login
 - gcloud container clusters get-credentials CLUSTER_NAME
 
