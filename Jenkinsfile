@@ -53,8 +53,8 @@ pipeline {
             steps {
                 echo "Building Docker flask image ..."
                 dir('redis_flask') {
-                    // sh 'docker-compose build --no-cache -t gihan4/k8sredis:${BUILD_NUMBER} -t gihan4/k8sredis:latest -f .'
-                    sh 'docker-compose build --no-cache -t $DOCKER_IMAGE:${BUILD_NUMBER} -f .'
+                    // build image with a new tag
+                    sh 'docker build --no-cache -t $DOCKER_IMAGE:${BUILD_NUMBER} -f .'
                 }
             }
         }
