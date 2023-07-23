@@ -2,6 +2,13 @@ pipeline {
     agent any
 
 
+    environment {
+        // Define the environment variable with the BUILD NUMBER
+        BUILD_NUMBER = "${env.BUILD_NUMBER}"
+        DOCKER_IMAGE = "gihan4/k8sredis"
+    }
+
+
     stages {
         stage('Cleanup') {
             steps {
@@ -16,7 +23,7 @@ pipeline {
             steps {
                 // Delete from Jenkins local server
                 echo "Stopping and removing containers and images on Jenkins server..."
-                sh "docker rmi -f gihan4/k8sapp:latest"
+                sh "docker rmi -f $DOCKER_IMAGE:${BUILD_NUMBER}"
             }
         }
 
@@ -31,7 +38,8 @@ pipeline {
             steps {
                 echo "Building Docker flask image ..."
                 dir('redis_flask') {
-                    sh 'docker-compose build --no-cache -t gihan4/k8sredis:${BUILD_NUMBER} -t gihan4/k8sredis:latest -f .'
+                    // sh 'docker-compose build --no-cache -t gihan4/k8sredis:${BUILD_NUMBER} -t gihan4/k8sredis:latest -f .'
+                    sh 'docker-compose build --no-cache -t $DOCKER_IMAGE:${BUILD_NUMBER} -f .'
                 }
             }
         }
@@ -39,7 +47,7 @@ pipeline {
         stage('Push app Image to Docker Hub') {
             steps {
                 echo "Pushing Docker image to Docker Hub..."
-                sh 'docker push --all-tags gihan4/k8sredis'
+                sh 'docker push --all-tags $DOCKER_IMAGE'
             }
         }
 
@@ -55,6 +63,10 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
+
+                // Use sed to replace the BUILD_NUMBER in the deployment manifest
+                sh "sed -i 's/\\${BUILD_NUMBER}/${BUILD_NUMBER}/g' /var/lib/jenkins/k8s-manifests/new-manifest.yaml"
+                
                 // Deploy the Docker image to the Kubernetes cluster using kubectl with the manifest yaml file
                 echo "deploy docker flask on cluster..."
                 sh 'kubectl apply -f /var/lib/jenkins/k8s-manifests/new-manifest.yaml'
@@ -95,6 +107,7 @@ pipeline {
                 }
                 
            }
+
             
     }
 }
