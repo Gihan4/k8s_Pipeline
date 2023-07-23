@@ -23,7 +23,7 @@ pipeline {
             steps {
                 // Delete from Jenkins local server
                 echo "Stopping and removing containers and images on Jenkins server..."
-                //sh "docker rmi -f $DOCKER_IMAGE:${BUILD_NUMBER}"
+                //sh "docker rmi -f ${DOCKER_IMAGE}:${BUILD_NUMBER}"
 
                 script {
 
@@ -54,7 +54,7 @@ pipeline {
                 echo "Building Docker flask image ..."
                 dir('redis_flask') {
                     // build image with a new tag
-                    sh "docker build --no-cache -t $DOCKER_IMAGE:${BUILD_NUMBER} -f ."
+                    sh "docker build --no-cache -t ${DOCKER_IMAGE}:${BUILD_NUMBER} -f ."
                 }
             }
         }
@@ -62,7 +62,7 @@ pipeline {
         stage('Push app Image to Docker Hub') {
             steps {
                 echo "Pushing Docker image to Docker Hub..."
-                sh 'docker push --all-tags $DOCKER_IMAGE'
+                sh 'docker push --all-tags ${DOCKER_IMAGE}'
             }
         }
 
