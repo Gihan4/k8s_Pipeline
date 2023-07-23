@@ -23,7 +23,19 @@ pipeline {
             steps {
                 // Delete from Jenkins local server
                 echo "Stopping and removing containers and images on Jenkins server..."
-                sh "docker rmi -f $DOCKER_IMAGE:${BUILD_NUMBER}"
+                //sh "docker rmi -f $DOCKER_IMAGE:${BUILD_NUMBER}"
+
+                // List all images associated with the DOCKER IMAGE repository
+                def dockerImages = sh(script: "docker images --filter=reference='$DOCKER_IMAGE' --format '{{.Repository}}:{{.Tag}}'", returnStdout: true).trim()
+
+                // Split the images into an array
+                def imagesArray = dockerImages.split()
+
+                // Remove each image (repository:tag) one by one
+                imagesArray.each { image ->
+                    sh "docker rmi -f $image"
+                }
+                
             }
         }
 
