@@ -42,9 +42,8 @@ K8S_Pipeline showcases a robust and efficient CI/CD workflow, reflecting a dedic
 
 
 
-Prerequisites:
+# Prerequisites:
 - this ia a quick tutorial to set up before runnning the pipeline. this setup is required only once.
-- notice: if you change the cluster, you shall redo the command <configure 'kubectl'>.
 
 - Create a cluster in GCP Kubernetes Engine.
 - Install `kubectl` on the local Jenkins machine. You can follow this guide for installing `kubectl` on Linux: [Install `kubectl` on Linux](https://gist.github.com/davidlzs/20237052e4b8a671b65e057c21d13d19#file-install_kubectl_on_linux-sh).
@@ -52,11 +51,11 @@ Prerequisites:
 - Set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable on the local host to the path of your `<key-file.json>`. `export GOOGLE_APPLICATION_CREDENTIALS="/path/to/your/key-file.json"`.
 - install gcloud. you can follow this guide for installing 'gcloud' on linux: https://gist.github.com/devops-school/20d8e18d31fe69d7f02c9ce01acbca05
 - run this command: <sudo apt-get install google-cloud-sdk-gke-gcloud-auth-plugin>
-- Configure `kubectl` with cluster credentials on the local host using the command: `gcloud container clusters get-credentials <cluster-name> --zone <zone> --project <project-id>`.
 - store the manifest yaml file in local jenkins.
-- great! now you will have a configured workspace with a connected running cluster to jenkins.
+- great! now you will have a configured workspace
 
 or
+
 - https://cloud.google.com/sdk/docs/install
 - https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
 - gcloud auth login
