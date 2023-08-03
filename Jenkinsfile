@@ -86,7 +86,7 @@ pipeline {
                 sh 'kubectl apply -f /var/lib/jenkins/k8s-manifests/new-manifest.yaml'
 
                 // return the variable to the file
-                sh "sed -i 's/{BUILD_NUMBER}/{{BUILD_NUMBER}}/g' /var/lib/jenkins/k8s-manifests/new-manifest.yaml"
+                sh "sed -i 's/${BUILD_NUMBER}/{{BUILD_NUMBER}}/g' /var/lib/jenkins/k8s-manifests/new-manifest.yaml"
 
             }
         }
