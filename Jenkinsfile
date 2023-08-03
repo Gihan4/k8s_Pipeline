@@ -67,15 +67,15 @@ pipeline {
 
         
 
-        stage('Connect Cluster') {
+        stage('Connect Test Cluster') {
             steps {
                 echo "connecting to the cluster..."
-                sh 'gcloud container clusters get-credentials autopilot-cluster --region us-central1 --project formidable-hold-392607'
+                sh 'gcloud container clusters get-credentials autopilot-cluster-test --region us-central1 --project formidable-hold-392607'
             }
         }
 
 
-        stage('Deploy to Kubernetes') {
+        stage('Deploy to Test Cluster') {
             steps {
 
                 // Use sed to replace the BUILD_NUMBER in the deployment manifest
@@ -84,9 +84,6 @@ pipeline {
                 // Deploy the Docker image to the Kubernetes cluster using kubectl with the manifest yaml file
                 echo "deploy docker flask on cluster..."
                 sh 'kubectl apply -f /var/lib/jenkins/k8s-manifests/new-manifest.yaml'
-
-                // return the variable to the file
-                sh "sed -i 's/${BUILD_NUMBER}/{{BUILD_NUMBER}}/g' /var/lib/jenkins/k8s-manifests/new-manifest.yaml"
 
             }
         }
@@ -127,6 +124,27 @@ pipeline {
            }
 
             
+        }
+
+        stage('Connect Production Cluster') {
+            steps {
+                echo "connecting to the cluster..."
+                sh 'gcloud container clusters get-credentials autopilot-cluster-production --region us-central1 --project formidable-hold-392607'
+            }
+        }
+
+
+        stage('Deploy to Production Cluster') {
+            steps {
+
+                // Deploy the Docker image to the Kubernetes cluster using kubectl with the manifest yaml file
+                echo "deploy docker flask on cluster..."
+                sh 'kubectl apply -f /var/lib/jenkins/k8s-manifests/new-manifest.yaml'
+
+                // return the variable to the file
+                sh "sed -i 's/{BUILD_NUMBER}/${{BUILD_NUMBER}}/g' /var/lib/jenkins/k8s-manifests/new-manifest.yaml"
+
+            }
         }
     }
 }
