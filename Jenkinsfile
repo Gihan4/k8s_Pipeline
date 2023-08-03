@@ -1,7 +1,6 @@
 pipeline {
     agent any
 
-
     environment {
         // Define the environment variable with the BUILD NUMBER
         BUILD_NUMBER = "${env.BUILD_NUMBER}"
@@ -71,7 +70,7 @@ pipeline {
         stage('Connect Cluster') {
             steps {
                 echo "connecting to the cluster..."
-                sh 'gcloud container clusters get-credentials autopilot-cluster-1 --region us-central1 --project formidable-hold-392607'
+                sh 'gcloud container clusters get-credentials autopilot-cluster --region us-central1 --project formidable-hold-392607'
             }
         }
 
@@ -85,6 +84,11 @@ pipeline {
                 // Deploy the Docker image to the Kubernetes cluster using kubectl with the manifest yaml file
                 echo "deploy docker flask on cluster..."
                 sh 'kubectl apply -f /var/lib/jenkins/k8s-manifests/new-manifest.yaml'
+
+                // return the variable to the file
+                sh "sed -i 's/{BUILD_NUMBER}/${{BUILD_NUMBER}}/g' /var/lib/jenkins/k8s-manifests/new-manifest.yaml"
+
+
             }
         }
 
@@ -109,7 +113,7 @@ pipeline {
                     // Send a GET request to your Flask application and store the HTTP status code in a variable.
                     def HTTP_STATUS = sh(script: "curl -s -o /dev/null -w %{http_code} $FLASK_APP_URL", returnStdout: true).trim().toInteger()
         
-                    // Check if the HTTP status code is 200 (OK) or any other expected status code.
+                    // Check if the HTTP status code is 200 (OK), so flask is up
                     def EXPECTED_STATUS_CODE = 200
         
                     if (HTTP_STATUS == EXPECTED_STATUS_CODE) {
