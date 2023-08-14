@@ -79,11 +79,11 @@ pipeline {
             steps {
 
                 // Use sed to replace the BUILD_NUMBER in the deployment manifest
-                sh "sed -i 's/{{BUILD_NUMBER}}/${BUILD_NUMBER}/g' /var/lib/jenkins/k8s-manifests/new-manifest.yaml"
+                sh "sed -i 's/{{BUILD_NUMBER}}/${BUILD_NUMBER}/g' /var/lib/jenkins/k8s-manifests/k8s_manifest.yaml"
                 
                 // Deploy the Docker image to the Kubernetes cluster using kubectl with the manifest yaml file
                 echo "deploy docker flask on cluster..."
-                sh 'kubectl apply -f /var/lib/jenkins/k8s-manifests/new-manifest.yaml'
+                sh 'kubectl apply -f /var/lib/jenkins/k8s-manifests/k8s_manifest.yaml'
 
             }
         }
@@ -139,10 +139,10 @@ pipeline {
 
                 // Deploy the Docker image to the Kubernetes cluster using kubectl with the manifest yaml file
                 echo "deploy docker flask on cluster..."
-                sh 'kubectl apply -f /var/lib/jenkins/k8s-manifests/new-manifest.yaml'
+                sh 'kubectl apply -f /var/lib/jenkins/k8s-manifests/k8s_manifest.yaml'
 
                 // return the variable to the file
-                sh "sed -i 's/{BUILD_NUMBER}/{{BUILD_NUMBER}}/g' /var/lib/jenkins/k8s-manifests/new-manifest.yaml"
+                sh "sed -i 's/{BUILD_NUMBER}/{{BUILD_NUMBER}}/g' /var/lib/jenkins/k8s-manifests/k8s_manifest.yaml"
 
             }
         }
